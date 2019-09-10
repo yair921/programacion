@@ -1,0 +1,20 @@
+type Distribuidor {
+    _id: ID!
+    nombre: String!
+    id_fiscal: String!
+}
+
+input DistribuidorInput {
+    nombre: String!
+    id_fiscal: String!
+}
+
+type Query {
+    "Consulta todos los distribuidores."
+    obtenerDistribuidores: [Distribuidor]
+}
+
+type Mutation {
+    "Agregar un nuevo distribuidor"
+    agregarDistribuidor(input: DistribuidorInput!): Distribuidor
+}
