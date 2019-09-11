@@ -6,14 +6,13 @@ const express = require('express');
 const gqlMiddelware = require('express-graphql');
 const { readFileSync } = require('fs');
 const { join } = require('path');
-const resolvers = require('./lib/resolvers');
+const resolvers = require('./gql/resolvers');
 const app = express();
 const port = process.env.port || 3000;
 
-
 // Definiendo el esquema.
 const typeDefs = readFileSync(
-    join(__dirname, 'lib', 'schema.graphql'),
+    join(__dirname, 'gql', 'schema.graphql'),
     'utf-8'
 );
 
