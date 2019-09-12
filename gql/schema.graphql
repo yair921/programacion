@@ -9,6 +9,11 @@ input DistribuidorInput {
     id_fiscal: String!
 }
 
+input DistibuidorInputUpdate {
+    nombre: String
+    id_fiscal: String
+}
+
 type Query {
     "Consulta todos los distribuidores."
     obtenerDistribuidores: [Distribuidor]
@@ -16,5 +21,7 @@ type Query {
 
 type Mutation {
     "Agregar un nuevo distribuidor"
-    agregarDistribuidor(input: DistribuidorInput!): Distribuidor
+    addDistribuidor(input: DistribuidorInput!): Distribuidorcccc
+    "Actualizar un distribuidor"
+    updateDistribuidor(_id: ID!, input: DistribuidorInputUpdate!): Distribuidor
 }

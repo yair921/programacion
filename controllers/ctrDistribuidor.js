@@ -1,19 +1,18 @@
 const Db = require('../utility/db');
 const { ObjectID } = require('mongodb');
 const { errorHandler } = require('../utility/errorHandler');
-const database = 'programacion';
-const collectionName = 'distribuidores';
+const collectionName = 'distribuidor';
 
 class CtrDistribuidor {
 
-    static agregarDistribuidor(root, args) {
+    static add(root, args) {
         return new Promise(async resolve => {
-            let db = new Db(database);
+            let db = new Db();
             try {
                 let objCnn = await db.openConnection();
                 if (!objCnn.status) {
                     errorHandler({
-                        method: 'CtrDistribuidor.agregarDistribuidor',
+                        method: 'CtrDistribuidor.add',
                         message: `Error connecting to database ${objCnn.message}`
                     });
                     resolve(`Error has ocurred!`);
@@ -29,7 +28,7 @@ class CtrDistribuidor {
                 collection.insertOne(newObj, (err, result) => {
                     if (err) {
                         errorHandler({
-                            method: 'CtrDistribuidor.agregarDistribuidor',
+                            method: 'CtrDistribuidor.add',
                             message: `Error executing query ${err}`
                         });
                         resolve(`Error has ocurred!`);
@@ -43,7 +42,7 @@ class CtrDistribuidor {
                 });
             } catch (error) {
                 errorHandler({
-                    method: 'CtrDistribuidor.agregarDistribuidor',
+                    method: 'CtrDistribuidor.add',
                     message: `Unexpected error -> ${error}`
                 });
                 resolve(`Error has ocurred!`);
@@ -51,11 +50,51 @@ class CtrDistribuidor {
                 db.closeConnection();
             }
         });
-        // return new Promise(resolve => {
-        //     resolve({
-        //         nombre: args.input.nombre
-        //     });
-        // });
+    }
+
+    static update(root, input) {
+        return new Promise(async resolve => {
+            let db = new Db();
+            try {
+                let objCnn = await db.openConnection();
+                if (!objCnn.status) {
+                    errorHandler({
+                        method: 'CtrDistribuidor.update',
+                        message: `Error connecting to database ${objCnn.message}`
+                    });
+                    resolve(`Error has ocurred!`);
+                    return;
+                }
+                // let collection = objCnn.db.collection(collectionName);
+                // let newObj = {
+                //    nombre: args.input.nombre,
+                //     id_fiscal: args.input.id_fiscal,
+                //     updated_at: new Date()
+                // }
+                // collection.updateOne(newObj, (err, result) => {
+                //     if (err) {
+                //         errorHandler({
+                //             method: 'CtrDistribuidor.update',
+                //             message: `Error executing query ${err}`
+                //         });
+                //         resolve(`Error has ocurred!`);
+                //         return;
+                //     }
+                //     resolve({
+                //         _id: ObjectID(result.insertedId),
+                //         nombre: args.input.nombre,
+                //         id_fiscal: args.input.id_fiscal
+                //     });
+                // });
+            } catch (error) {
+                errorHandler({
+                    method: 'CtrDistribuidor.update',
+                    message: `Unexpected error -> ${error}`
+                });
+                resolve(`Error has ocurred!`);
+            }
+        });
+
     }
 }
 

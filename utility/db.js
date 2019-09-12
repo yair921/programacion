@@ -20,8 +20,8 @@ class Db {
         return this.clientValue;
     }
 
-    constructor(database) {
-        this.database = database;
+    constructor() {
+        this.database = process.env.DB_NAME;
     }
 
     openConnection() {
