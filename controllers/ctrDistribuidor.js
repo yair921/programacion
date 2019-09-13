@@ -64,7 +64,10 @@ class CtrDistribuidor {
                 return `Error has ocurred!`;
             }
             let collection = objCnn.db.collection(collectionName);
-            let result = await collection.updateOne({ _id: ObjectID(input._id) }, { $set: { ...input.input, updated_at: new Date() } });
+            let result = await collection.updateOne(
+                { _id: ObjectID(input._id) },
+                { $set: { ...input.input, updated_at: new Date() } }
+            );
             if (result.matchedCount > 0) {
                 result = await collection.findOne({ _id: ObjectID(input._id) });
             }
@@ -75,7 +78,47 @@ class CtrDistribuidor {
                 message: `Unexpected error -> ${error}`
             });
             return `Error has ocurred!`;
+        } finally {
+            db.closeConnection();
         }
+    }
+
+    static delete(root, input) {
+        return new Promise(async resolve => {
+            let db = new Db();
+            try {
+                let objCnn = await db.openConnection();
+                if (!objCnn.status) {
+                    errorHandler({
+                        method: 'CtrDistribuidor.delete',
+                        message: `Error connecting to database ${objCnn.message}`
+                    });
+                    resolve({ message: `Error has ocurred!` });
+                }
+                let collection = objCnn.db.collection(collectionName);
+                collection.deleteOne({ _id: ObjectID(input._id) },
+                    (err, obj) => {
+                        if (err) {
+                            errorHandler({
+                                method: 'CtrDistribuidor.delete',
+                                message: `Error ->  ${err}`
+                            });
+                        }
+                        resolve({
+                            wasDelete: true
+                        });
+                    }
+                );
+            } catch (error) {
+                errorHandler({
+                    method: 'CtrDistribuidor.update',
+                    message: `Unexpected error -> ${error}`
+                });
+                return false;
+            } finally {
+                db.closeConnection();
+            }
+        });
     }
 }
 

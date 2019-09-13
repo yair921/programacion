@@ -14,6 +14,10 @@ input DistribuidorInputUpdate {
     id_fiscal: String
 }
 
+type DeleteRespopnse {
+    wasDelete: Boolean
+}
+
 type Query {
     "Consulta todos los distribuidores."
     obtenerDistribuidores: [Distribuidor]
@@ -24,4 +28,6 @@ type Mutation {
     addDistribuidor(input: DistribuidorInput!): Distribuidor
     "Actualizar un distribuidor"
     updateDistribuidor(_id: ID!, input: DistribuidorInputUpdate!): Distribuidor
+    "Eliminar un distribuidor"
+    deleteDistribuidor(_id:ID!): DeleteRespopnse
 }
