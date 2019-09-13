@@ -52,49 +52,30 @@ class CtrDistribuidor {
         });
     }
 
-    static update(root, input) {
-        return new Promise(async resolve => {
-            let db = new Db();
-            try {
-                let objCnn = await db.openConnection();
-                if (!objCnn.status) {
-                    errorHandler({
-                        method: 'CtrDistribuidor.update',
-                        message: `Error connecting to database ${objCnn.message}`
-                    });
-                    resolve(`Error has ocurred!`);
-                    return;
-                }
-                // let collection = objCnn.db.collection(collectionName);
-                // let newObj = {
-                //    nombre: args.input.nombre,
-                //     id_fiscal: args.input.id_fiscal,
-                //     updated_at: new Date()
-                // }
-                // collection.updateOne(newObj, (err, result) => {
-                //     if (err) {
-                //         errorHandler({
-                //             method: 'CtrDistribuidor.update',
-                //             message: `Error executing query ${err}`
-                //         });
-                //         resolve(`Error has ocurred!`);
-                //         return;
-                //     }
-                //     resolve({
-                //         _id: ObjectID(result.insertedId),
-                //         nombre: args.input.nombre,
-                //         id_fiscal: args.input.id_fiscal
-                //     });
-                // });
-            } catch (error) {
+    static async update(root, input) {
+        let db = new Db();
+        try {
+            let objCnn = await db.openConnection();
+            if (!objCnn.status) {
                 errorHandler({
                     method: 'CtrDistribuidor.update',
-                    message: `Unexpected error -> ${error}`
+                    message: `Error connecting to database ${objCnn.message}`
                 });
-                resolve(`Error has ocurred!`);
+                return `Error has ocurred!`;
             }
-        });
-
+            let collection = objCnn.db.collection(collectionName);
+            let result = await collection.updateOne({ _id: ObjectID(input._id) }, { $set: { ...input.input, updated_at: new Date() } });
+            if (result.matchedCount > 0) {
+                result = await collection.findOne({ _id: ObjectID(input._id) });
+            }
+            return result;
+        } catch (error) {
+            errorHandler({
+                method: 'CtrDistribuidor.update',
+                message: `Unexpected error -> ${error}`
+            });
+            return `Error has ocurred!`;
+        }
     }
 }
 
