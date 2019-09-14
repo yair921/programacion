@@ -4,6 +4,22 @@ type Distribuidor {
     id_fiscal: String!
 }
 
+type DistribuidorResAdd {
+    status: Boolean
+    message: String
+    _id: ID!
+}
+
+type DistribuidorResUpdate {
+    status: Boolean
+    message: String
+}
+
+type DistribuidorResDelete {
+    status: Boolean
+    message: String
+}
+
 input DistribuidorInput {
     nombre: String!
     id_fiscal: String!
@@ -14,9 +30,6 @@ input DistribuidorInputUpdate {
     id_fiscal: String
 }
 
-type DeleteRespopnse {
-    wasDelete: Boolean
-}
 
 type Query {
     "Consulta todos los distribuidores."
@@ -25,9 +38,9 @@ type Query {
 
 type Mutation {
     "Agregar un nuevo distribuidor"
-    addDistribuidor(input: DistribuidorInput!): Distribuidor
+    addDistribuidor(input: DistribuidorInput!): DistribuidorResAdd
     "Actualizar un distribuidor"
-    updateDistribuidor(_id: ID!, input: DistribuidorInputUpdate!): Distribuidor
+    updateDistribuidor(_id: ID!, input: DistribuidorInputUpdate!): DistribuidorResUpdate
     "Eliminar un distribuidor"
-    deleteDistribuidor(_id:ID!): DeleteRespopnse
+    deleteDistribuidor(_id: ID!): DistribuidorResDelete
 }
