@@ -4,6 +4,12 @@ type Distribuidor {
     id_fiscal: String!
 }
 
+type DistribuidorResGetAll {
+    status: Boolean
+    message: String
+    data: [Distribuidor]
+}
+
 type DistribuidorResAdd {
     status: Boolean
     message: String
@@ -34,6 +40,8 @@ input DistribuidorInputUpdate {
 type Query {
     "Consulta todos los distribuidores."
     obtenerDistribuidores: [Distribuidor]
+    "Obtener todos los distribuidores"
+    getAllDistribuidor: DistribuidorResGetAll
 }
 
 type Mutation {

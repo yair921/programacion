@@ -6,6 +6,37 @@ const className = 'CtrDistribuidor';
 
 class CtrDistribuidor {
 
+    static async getAll() {
+        let db = new Db();
+        try {
+            let objCnn = await db.openConnection();
+            if (!objCnn.status) {
+                errorHandler({
+                    method: `${className}.getAll`,
+                    message: `Error connecting to database ${objCnn.message}`
+                });
+            }
+            let collection = objCnn.db.collection(collectionName);
+            let result = await collection.find({}).toArray();
+            if (!result) {
+                errorHandler({
+                    method: `${className}.getAll`,
+                    message: `Error to execute find method of mongodb.`
+                });
+            }
+            return {
+                status: true,
+                message: null,
+                data: result
+            }
+        } catch (error) {
+            errorHandler({
+                method: `${className}.add`,
+                message: `Unexpected error -> ${error}`
+            });
+        }
+    }
+
     static async add(root, args) {
         let exist = await CtrDistribuidor.validateIfExist({ id_fiscal: args.input.id_fiscal });
         if (exist) {
