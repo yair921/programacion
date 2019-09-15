@@ -47,7 +47,6 @@ class Db {
 
     closeConnection() {
         this.client.close();
-        console.log('Connection was closed!');
     }
 
 }
