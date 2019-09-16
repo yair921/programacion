@@ -38,10 +38,44 @@ input DistribuidorInputUpdate {
     active: Boolean
 }
 
+type SalaTipo {
+    _id: ID!
+    nombre: String!
+    active: Boolean!
+}
+
+type SalaTipoResGetAll {
+    status: Boolean
+    message: String
+    data: [SalaTipo]
+}
+
+type SalaTipoResAdd {
+    status: Boolean
+    message: String
+    _id: ID
+}
+
+type SalaTipoResUpdate {
+    status: Boolean
+    message: String
+}
+
+type SalaTipoResDelete {
+    status: Boolean
+    message: String
+}
+
+input SalaTipoInput {
+    nombre: String!
+}
+
+input SalaTipoInputUpdate {
+    nombre: String
+    active: Boolean
+}
 
 type Query {
-    "Consulta todos los distribuidores."
-    obtenerDistribuidores: [Distribuidor]
     "Obtener todos los distribuidores"
     getAllDistribuidor: DistribuidorResGetAll
 }

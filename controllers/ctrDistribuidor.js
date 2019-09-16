@@ -1,50 +1,57 @@
-const { ObjectID } = require('mongodb');
 const { errorHandler } = require('../utility/errorHandler');
 const Db = require('../utility/db');
 const config = require('../config');
-const collectionName = 'distribuidor';
 const className = 'CtrDistribuidor';
+const collectionName = 'distribuidor';
 
 class CtrDistribuidor {
 
     static async getAll() {
-        let db = new Db();
-        let objCnn = await db.openConnection();
-        if (!objCnn.status) {
-            errorHandler({
-                method: `${className}.getAll`,
-                message: `${config.messages.errorConnectionDb} -> ${objCnn.message}`
-            });
-            return { ...config.messages.getFail, data: [{ _id: null, nombre: null, id_filcal: null, active: null }] };
-        }
+        let resError = {
+            ...config.messages.getFail,
+            data: [
+                {
+                    _id: null,
+                    nombre: null,
+                    id_filcal: null,
+                    active: null
+                }
+            ]
+        };
         try {
-            let collection = objCnn.db.collection(collectionName);
-            let result = await collection.find({ enabled: true }).toArray();
-            if (!result) {
+            let objResult = await Db.find({
+                dbName: config.db.programacion,
+                collectionName,
+                params: { enabled: true }
+            });
+            if (!objResult.status) {
                 errorHandler({
                     method: `${className}.getAll`,
-                    message: config.messages.errorMongoFind
+                    message: `${config.messages.errorConnectionDb} -> ${objCnn.message}`
                 });
-                return { ...config.messages.getFail, data: [{ _id: null, nombre: null, id_filcal: null, active: null }] };
+                return resError
             }
             return {
                 status: true,
                 message: null,
-                data: result
-            }
+                data: objResult.result
+            };
         } catch (error) {
             errorHandler({
                 method: `${className}.add`,
                 message: `Unexpected error -> ${error}`
             });
-            return { ...config.messages.errorUnexpected, data: [{ _id: null, nombre: null, id_filcal: null, active: null }] };
-        } finally {
-            db.closeConnection();
+            return resError;
         }
     }
 
     static async add(root, args) {
-        let exist = await CtrDistribuidor.validateIfExist({ id_fiscal: args.input.id_fiscal });
+        let exist = await CtrDistribuidor.validateIfExist(
+            {
+                dbName: config.db.programacion,
+                collectionName,
+                params: { id_fiscal: args.input.id_fiscal }
+            });
         if (exist) {
             return {
                 status: false,
@@ -52,33 +59,34 @@ class CtrDistribuidor {
                 _id: null
             };
         }
-        let db = new Db();
-        let objCnn = await db.openConnection();
-        if (!objCnn.status) {
-            errorHandler({
-                method: `${className}.add`,
-                message: `${config.messages.errorConnectionDb} -> ${objCnn.message}`
-            });
-            return { ...config.messages.errorGeneric, _id: null };
-
-        }
+        let resError = {
+            ...config.messages.addFail,
+            _id: null
+        };
         try {
-            let collection = objCnn.db.collection(collectionName);
             let newObj = {
                 ...args.input,
                 active: true,
                 enabled: true,
                 create_at: new Date(),
                 updated_at: new Date()
+            };
+            let objResult = await Db.insertOne({
+                dbName: config.db.programacion,
+                collectionName,
+                params: newObj
+            });
+            if (!objResult.status) {
+                errorHandler({
+                    method: `${className}.add`,
+                    message: `${config.messages.errorConnectionDb} -> ${objCnn.message}`
+                });
+                return resError;
             }
-            let result = await collection.insertOne(newObj);
-            if (result) {
-                return {
-                    status: true,
-                    message: null,
-                    _id: ObjectID(result.insertedId)
-                }
-
+            return {
+                status: true,
+                message: null,
+                _id: objResult._id
             }
         } catch (error) {
             errorHandler({
@@ -86,28 +94,25 @@ class CtrDistribuidor {
                 message: `Unexpected error -> ${error}`
             });
             return { ...config.messages.errorUnexpected, _id: null };
-        } finally {
-            db.closeConnection();
         }
     }
 
     static async update(root, input) {
-        let db = new Db();
-        let objCnn = await db.openConnection();
-        if (!objCnn.status) {
-            errorHandler({
-                method: `${className}.update`,
-                message: `${config.messages.errorConnectionDb} -> ${objCnn.message}`
-            });
-            return config.messages.errorGeneric;
-        }
         try {
-            let collection = objCnn.db.collection(collectionName);
-            let result = await collection.updateOne(
-                { _id: ObjectID(input._id) },
-                { $set: { ...input.input, updated_at: new Date() } }
-            );
-            if (result && result.matchedCount > 0) {
+            let objResult = await Db.update({
+                dbName: config.db.programacion,
+                collectionName,
+                _id: input._id,
+                set: { ...input.input, updated_at: new Date() }
+            });
+            if (!objResult.status) {
+                errorHandler({
+                    method: `${className}.update`,
+                    message: `${config.messages.errorConnectionDb} -> ${objResult.message}`
+                });
+                return config.messages.updateFail;
+            }
+            if (objResult.result && objResult.result.matchedCount > 0) {
                 return config.messages.updateSuccesss;
             }
             return config.messages.updateFail;
@@ -117,25 +122,21 @@ class CtrDistribuidor {
                 message: `Unexpected error -> ${error}`
             });
             return config.messages.errorUnexpected;
-        } finally {
-            db.closeConnection();
         }
     }
 
     static async delete(root, input) {
-        let db = new Db();
-        let objCnn = await db.openConnection();
-        if (!objCnn.status) {
-            errorHandler({
-                method: `${className}.delete`,
-                message: `${config.messages.errorConnectionDb} -> ${objCnn.message}`
-            });
-            return config.messages.errorGeneric;
-        }
         try {
-            let collection = objCnn.db.collection(collectionName);
-            let result = await collection.deleteOne({ _id: ObjectID(input._id) });
-            if (!result) {
+            let objResult = await Db.delete({
+                dbName: config.db.programacion,
+                collectionName,
+                _id: input._id
+            });
+            if (!objResult.status) {
+                errorHandler({
+                    method: `${className}.delete`,
+                    message: `${config.messages.errorConnectionDb} -> ${objResult.message}`
+                });
                 return config.messages.deleteFail;
             }
             return config.messages.deleteSuccesss;
@@ -145,36 +146,33 @@ class CtrDistribuidor {
                 message: `Unexpected error -> ${error}`
             });
             return config.messages.errorUnexpected;
-        } finally {
-            db.closeConnection();
         }
     }
 
-    static async validateIfExist(params) {
-        let db = new Db();
-        let objCnn = await db.openConnection();
-        if (!objCnn.status) {
-            errorHandler({
-                method: `${className}.validateIfExist`,
-                message: `${config.messages.errorConnectionDb} -> ${objCnn.message}`
-            });
-            return config.messages.errorGeneric;
-        }
+    static async validateIfExist(args) {
         try {
-            let collection = objCnn.db.collection(collectionName);
-            let result = await collection.findOne({ ...params, enabled: true });
-            if (result)
-                return true
-            else
-                return false
+            let objResult = await Db.find({
+                dbName: config.db.programacion,
+                collectionName,
+                params: { ...args.params, enabled: true }
+            });
+            if (!objResult.status) {
+                errorHandler({
+                    method: `${className}.validateIfExist`,
+                    message: objResult.message
+                });
+                return true;
+            } else if (objResult.result.length > 0) {
+                return true;
+            } else {
+                return false;
+            }
         } catch (error) {
             errorHandler({
                 method: `${className}.validateIfExist`,
-                message: `${config.messages.errorConnectionDb} -> ${objCnn.message}`
+                message: `${config.messages.errorUnexpected} -> ${error}`
             });
-            return config.messages.errorUnexpected;
-        } finally {
-            db.closeConnection();
+            return true;
         }
     }
 }

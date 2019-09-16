@@ -11,5 +11,8 @@ module.exports = {
         updateFail: { status: false, message: `No se ha podido actualizar el registro.` },
         deleteFail: { status: false, message: `No se ha podido eliminar el registro.` },
         getFail: { status: false, message: `No se ha podido realizar la consulta.` }
+    },
+    db: {
+        programacion: 'procinal-programacion'
     }
 };
