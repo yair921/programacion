@@ -1,6 +1,7 @@
 const { errorHandler } = require('../utility/errorHandler');
 const Db = require('../utility/db');
 const config = require('../config');
+const Helper = require('../utility/helper');
 const className = 'CtrDistribuidor';
 const collectionName = 'distribuidor';
 
@@ -46,7 +47,7 @@ class CtrDistribuidor {
     }
 
     static async add(root, args) {
-        let exist = await CtrDistribuidor.validateIfExist(
+        let exist = await Helper.validateIfExist(
             {
                 dbName: config.db.programacion,
                 collectionName,
@@ -55,7 +56,7 @@ class CtrDistribuidor {
         if (exist) {
             return {
                 status: false,
-                message: `El nit ya existe enla base de datos!`,
+                message: `El nit ya existe en la base de datos!`,
                 _id: null
             };
         }
@@ -146,33 +147,6 @@ class CtrDistribuidor {
                 message: `Unexpected error -> ${error}`
             });
             return config.messages.errorUnexpected;
-        }
-    }
-
-    static async validateIfExist(args) {
-        try {
-            let objResult = await Db.find({
-                dbName: config.db.programacion,
-                collectionName,
-                params: { ...args.params, enabled: true }
-            });
-            if (!objResult.status) {
-                errorHandler({
-                    method: `${className}.validateIfExist`,
-                    message: objResult.message
-                });
-                return true;
-            } else if (objResult.result.length > 0) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (error) {
-            errorHandler({
-                method: `${className}.validateIfExist`,
-                message: `${config.messages.errorUnexpected} -> ${error}`
-            });
-            return true;
         }
     }
 }

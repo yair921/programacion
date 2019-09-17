@@ -1,3 +1,14 @@
+type AddResponse {
+    status: Boolean
+    message: String
+    _id: ID
+}
+
+type UpdateDeleteResponse {
+    status: Boolean
+    message: String
+}
+
 type Distribuidor {
     _id: ID!
     id_fiscal: String!
@@ -9,22 +20,6 @@ type DistribuidorResGetAll {
     status: Boolean
     message: String
     data: [Distribuidor]
-}
-
-type DistribuidorResAdd {
-    status: Boolean
-    message: String
-    _id: ID
-}
-
-type DistribuidorResUpdate {
-    status: Boolean
-    message: String
-}
-
-type DistribuidorResDelete {
-    status: Boolean
-    message: String
 }
 
 input DistribuidorInput {
@@ -50,22 +45,6 @@ type SalaTipoResGetAll {
     data: [SalaTipo]
 }
 
-type SalaTipoResAdd {
-    status: Boolean
-    message: String
-    _id: ID
-}
-
-type SalaTipoResUpdate {
-    status: Boolean
-    message: String
-}
-
-type SalaTipoResDelete {
-    status: Boolean
-    message: String
-}
-
 input SalaTipoInput {
     nombre: String!
 }
@@ -75,16 +54,55 @@ input SalaTipoInputUpdate {
     active: Boolean
 }
 
+type TeatroTipo {
+    _id: ID!
+    nombre: String!
+    active: Boolean!
+}
+
+type TeatroResGetAll {
+    status: Boolean
+    message: String
+    data: [SalaTipo]
+}
+
+input TeatroInput {
+    nombre: String!
+}
+
+input TeatroInputUpdate {
+    nombre: String
+    active: Boolean
+}
+
 type Query {
     "Obtener todos los distribuidores"
     getAllDistribuidor: DistribuidorResGetAll
+    "Obtener todos los tipos de sala"
+    getAllSalaTipo: SalaTipoResGetAll 
+    "Obtener todos los teatros"
+    getAllTeatro: TeatroResGetAll
 }
 
 type Mutation {
     "Agregar un nuevo distribuidor"
-    addDistribuidor(input: DistribuidorInput!): DistribuidorResAdd
+    addDistribuidor(input: DistribuidorInput!): AddResponse
     "Actualizar un distribuidor"
-    updateDistribuidor(_id: ID!, input: DistribuidorInputUpdate!): DistribuidorResUpdate
+    updateDistribuidor(_id: ID!, input: DistribuidorInputUpdate!): UpdateDeleteResponse
     "Eliminar un distribuidor"
-    deleteDistribuidor(_id: ID!): DistribuidorResDelete
+    deleteDistribuidor(_id: ID!): UpdateDeleteResponse
+
+    "Agregar una nueva salaTipo"
+    addSalaTipo(input: SalaTipoInput!): AddResponse
+    "Actualizar una salaTipo"
+    updateSalaTipo(_id: ID!, input: SalaTipoInputUpdate!): UpdateDeleteResponse
+    "Eliminar una salaTipo"
+    deleteSalaTipo(_id: ID!): UpdateDeleteResponse
+
+    "Agregar un nuevo teatro"
+    addTeatro(input: TeatroInput!): AddResponse
+    "Actualizar un teatro"
+    updateTeatro(_id: ID!, input: TeatroInputUpdate!): UpdateDeleteResponse
+    "Eliminar un teatro"
+    deleteTeatro(_id: ID!): UpdateDeleteResponse
 }
