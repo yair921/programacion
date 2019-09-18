@@ -54,7 +54,7 @@ input SalaTipoInputUpdate {
     active: Boolean
 }
 
-type TeatroTipo {
+type Teatro {
     _id: ID!
     nombre: String!
     active: Boolean!
@@ -63,7 +63,7 @@ type TeatroTipo {
 type TeatroResGetAll {
     status: Boolean
     message: String
-    data: [SalaTipo]
+    data: [Teatro]
 }
 
 input TeatroInput {
@@ -75,6 +75,27 @@ input TeatroInputUpdate {
     active: Boolean
 }
 
+type PeliculaFormato {
+    _id: ID!
+    nombre: String!
+    active: Boolean!
+}
+
+type PeliculaFormatoResGetAll {
+    status: Boolean
+    message: String
+    data: [PeliculaFormato]
+}
+
+input PeliculaFormatoInput {
+    nombre: String!
+}
+
+input PeliculaFormatoInputUpdate {
+    nombre: String
+    active: Boolean
+}
+
 type Query {
     "Obtener todos los distribuidores"
     getAllDistribuidor: DistribuidorResGetAll
@@ -82,6 +103,8 @@ type Query {
     getAllSalaTipo: SalaTipoResGetAll 
     "Obtener todos los teatros"
     getAllTeatro: TeatroResGetAll
+    "Obtener todos los Formatos de Peliculas"
+    getAllPeliculaFormato: PeliculaFormatoResGetAll
 }
 
 type Mutation {
@@ -105,4 +128,11 @@ type Mutation {
     updateTeatro(_id: ID!, input: TeatroInputUpdate!): UpdateDeleteResponse
     "Eliminar un teatro"
     deleteTeatro(_id: ID!): UpdateDeleteResponse
+
+    "Agregar un nuevo formato de película"
+    addPeliculaFormato(input: PeliculaFormatoInput!): AddResponse
+    "Actualizar un formato de película"
+    updatePeliculaFormato(_id: ID!, input: PeliculaFormatoInputUpdate!): UpdateDeleteResponse
+    "Eliminar un formato de película"
+    deletePeliculaFormato(_id: ID!): UpdateDeleteResponse
 }
