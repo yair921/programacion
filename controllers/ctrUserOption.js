@@ -1,11 +1,12 @@
+const { ObjectID } = require('mongodb');
 const { errorHandler } = require('../utility/errorHandler');
 const Db = require('../utility/db');
 const config = require('../config');
 const Helper = require('../utility/helper');
-const className = 'CtrSalasTipo';
-const collectionName = 'sala_tipo';
+const className = 'CtrUserOption';
+const collectionName = 'user_option';
 
-class CtrSalasTipo {
+class CtrUserOption {
 
     static async getAll() {
         let resError = {
@@ -14,6 +15,7 @@ class CtrSalasTipo {
                 {
                     _id: null,
                     nombre: null,
+                    actions: null,
                     active: null
                 }
             ]
@@ -50,12 +52,14 @@ class CtrSalasTipo {
             {
                 dbName: config.db.programacion,
                 collectionName,
-                params: { nombre: args.input.nombre }
+                params: {
+                    nombre: args.input.nombre
+                }
             });
         if (exist) {
             return {
                 status: false,
-                message: `La sala ya existe en la base de datos!`,
+                message: `La opción ya existe en la base de datos`,
                 _id: null
             };
         }
@@ -150,4 +154,4 @@ class CtrSalasTipo {
     }
 }
 
-module.exports = CtrSalasTipo;
+module.exports = CtrUserOption;

@@ -1,11 +1,12 @@
+const { ObjectID } = require('mongodb');
 const { errorHandler } = require('../utility/errorHandler');
 const Db = require('../utility/db');
 const config = require('../config');
 const Helper = require('../utility/helper');
-const className = 'CtrSalasTipo';
-const collectionName = 'sala_tipo';
+const className = 'CtrUser';
+const collectionName = 'user';
 
-class CtrSalasTipo {
+class CtrUser {
 
     static async getAll() {
         let resError = {
@@ -13,6 +14,8 @@ class CtrSalasTipo {
             data: [
                 {
                     _id: null,
+                    idTeatro: null,
+                    idUsuarioRol: null,
                     nombre: null,
                     active: null
                 }
@@ -50,12 +53,16 @@ class CtrSalasTipo {
             {
                 dbName: config.db.programacion,
                 collectionName,
-                params: { nombre: args.input.nombre }
+                params: {
+                    nombre: args.input.nombre,
+                    idTeatro: ObjectID(args.input.idTeatro),
+                    idUsuarioRol: ObjectID(args.input.idUsuarioRol)
+                }
             });
         if (exist) {
             return {
                 status: false,
-                message: `La sala ya existe en la base de datos!`,
+                message: `La sala ya existe en la base de datos`,
                 _id: null
             };
         }
@@ -66,6 +73,7 @@ class CtrSalasTipo {
         try {
             let newObj = {
                 ...args.input,
+                idTeatro: ObjectID(args.input.idTeatro),
                 active: true,
                 enabled: true,
                 create_at: new Date(),
@@ -99,6 +107,10 @@ class CtrSalasTipo {
 
     static async update(root, input) {
         try {
+            if (input.input.idTeatro)
+                input.input.idTeatro = ObjectID(input.input.idTeatro);
+            if (input.input.idUsuarioRol)
+                input.input.idUsuarioRol = ObjectID(input.input.idUsuarioRol);
             let objResult = await Db.update({
                 dbName: config.db.programacion,
                 collectionName,
@@ -150,4 +162,4 @@ class CtrSalasTipo {
     }
 }
 
-module.exports = CtrSalasTipo;
+module.exports = CtrUser;

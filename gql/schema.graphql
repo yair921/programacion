@@ -96,6 +96,95 @@ input PeliculaFormatoInputUpdate {
     active: Boolean
 }
 
+type Sala {
+    _id: ID!
+    idTeatro: ID!
+    nombre: String!
+    cantidadSilla: Int!
+    cleaningTime: Int!
+    active: Boolean!
+}
+
+type SalaResGetAll {
+    status: Boolean
+    message: String
+    data: [Sala]
+}
+
+input SalaInput {
+    idTeatro: ID!
+    nombre: String!
+    cantidadSilla: Int!
+    cleaningTime: Int!
+}
+
+input SalaInputUpdate {
+    idTeatro: ID
+    nombre: String
+    cantidadSilla: Int
+    cleaningTime: Int
+    active: Boolean
+}
+
+type Pelicula {
+    _id: ID!
+    idsPeliculaFormato: [ID!]!
+    nombre: String!
+    duration: Int!
+    active: Boolean!
+}
+
+type PeliculaResGetAll {
+    status: Boolean
+    message: String
+    data: [Pelicula]
+}
+
+input PeliculaInput {
+    idsPeliculaFormato: [ID!]!
+    nombre: String!
+    duration: Int!
+}
+
+input PeliculaInputUpdate {
+    idsPeliculaFormato: [ID!]
+    nombre: String
+    duration: Int
+    active: Boolean
+}
+
+
+
+
+
+type UserOption {
+    _id: ID!
+    nombre: String!
+    actions: [String!]!
+    active: Boolean!
+}
+
+type UserOptionResGetAll {
+    status: Boolean
+    message: String
+    data: [UserOption]
+}
+
+input UserOptionInput {
+    nombre: String!
+    actions: [String!]!
+}
+
+input UserOptionInputUpdate {
+    nombre: String
+    actions: [String!]
+    active: Boolean
+}
+
+
+
+
+
 type Query {
     "Obtener todos los distribuidores"
     getAllDistribuidor: DistribuidorResGetAll
@@ -105,6 +194,12 @@ type Query {
     getAllTeatro: TeatroResGetAll
     "Obtener todos los Formatos de Peliculas"
     getAllPeliculaFormato: PeliculaFormatoResGetAll
+    "Obtener todas las salas"
+    getAllSala: SalaResGetAll
+    "Obtener todas las películas"
+    getAllPelicula: PeliculaResGetAll
+    "Obtener todas las opciones de los usuarios"
+    getAllUserOption: UserOptionResGetAll
 }
 
 type Mutation {
@@ -135,4 +230,25 @@ type Mutation {
     updatePeliculaFormato(_id: ID!, input: PeliculaFormatoInputUpdate!): UpdateDeleteResponse
     "Eliminar un formato de película"
     deletePeliculaFormato(_id: ID!): UpdateDeleteResponse
+
+    "Agregar una sala"
+    addSala(input: SalaInput!): AddResponse
+    "Actualizar una sala"
+    updateSala(_id: ID!, input: SalaInputUpdate!): UpdateDeleteResponse
+    "Eliminar una sala"
+    deleteSala(_id: ID!): UpdateDeleteResponse
+
+    "Agregar una Película"
+    addPelicula(input: PeliculaInput!): AddResponse
+    "Actualizar una película"
+    updatePelicula(_id: ID!, input: PeliculaInputUpdate!): UpdateDeleteResponse
+    "Eliminar una película"
+    deletePelicula(_id: ID!): UpdateDeleteResponse
+
+    "Agregar una opción de usuario"
+    addUserOption(input: UserOptionInput!): AddResponse
+    "Actualizar una opción de usuario"
+    updateUserOption(_id: ID!, input: UserOptionInputUpdate!): UpdateDeleteResponse
+    "Eliminar una opción de usuario"
+    deleteUserOption(_id: ID!): UpdateDeleteResponse
 }
