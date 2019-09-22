@@ -1,3 +1,5 @@
+require('dotenv').config();
+const crypto = require('crypto-js');
 const { errorHandler } = require('../utility/errorHandler');
 const Db = require('../utility/db');
 const config = require('../config');
@@ -29,6 +31,16 @@ class Helper {
             });
             return true;
         }
+    }
+    static encrypt(text) {
+        let textEncrypt = crypto.AES.encrypt(text, process.env.SECRET_KEY);
+        return textEncrypt.toString();
+    }
+
+    static decrypt(textEncrypt) {
+        let bytes = crypto.AES.decrypt(textEncrypt, process.env.SECRET_KEY);
+        let text = bytes.toString(crypto.enc.Utf8);
+        return text;
     }
 }
 module.exports = Helper;

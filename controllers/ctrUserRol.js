@@ -3,10 +3,10 @@ const { errorHandler } = require('../utility/errorHandler');
 const Db = require('../utility/db');
 const config = require('../config');
 const Helper = require('../utility/helper');
-const className = 'CtrUsuarioRol';
-const collectionName = 'usuario_rol';
+const className = 'CtrUserRol';
+const collectionName = 'user_rol';
 
-class CtrUsuarioRol {
+class CtrUserRol {
 
     static async getAll() {
         let resError = {
@@ -53,15 +53,13 @@ class CtrUsuarioRol {
                 dbName: config.db.programacion,
                 collectionName,
                 params: {
-                    nombre: args.input.nombre,
-                    idTeatro: ObjectID(args.input.idTeatro),
-                    idUsuarioRol: ObjectID(args.input.idUsuarioRol)
+                    nombre: args.input.nombre
                 }
             });
         if (exist) {
             return {
                 status: false,
-                message: `La sala ya existe en la base de datos`,
+                message: `The user rol already exist!`,
                 _id: null
             };
         }
@@ -70,9 +68,15 @@ class CtrUsuarioRol {
             _id: null
         };
         try {
+            let permissions = args.input.permissions.map(m => {
+                return {
+                    ...m,
+                    idUserOption: ObjectID(m.idUserOption)
+                }
+            });
             let newObj = {
                 ...args.input,
-                idTeatro: ObjectID(args.input.idTeatro),
+                permissions: permissions,
                 active: true,
                 enabled: true,
                 create_at: new Date(),
@@ -106,10 +110,14 @@ class CtrUsuarioRol {
 
     static async update(root, input) {
         try {
-            if (input.input.idTeatro)
-                input.input.idTeatro = ObjectID(input.input.idTeatro);
-            if (input.input.idUsuarioRol)
-                input.input.idUsuarioRol = ObjectID(input.input.idUsuarioRol);
+            if (input.input.permissions)
+                input.input.permissions = input.input.permissions.map(m => {
+                    return {
+                        ...m,
+                        idUserOption: ObjectID(m.idUserOption)
+                    }
+                });
+
             let objResult = await Db.update({
                 dbName: config.db.programacion,
                 collectionName,
@@ -161,4 +169,4 @@ class CtrUsuarioRol {
     }
 }
 
-module.exports = CtrUsuarioRol;
+module.exports = CtrUserRol;

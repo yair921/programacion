@@ -8,7 +8,9 @@ const { readFileSync } = require('fs');
 const { join } = require('path');
 const resolvers = require('./gql/resolvers');
 const app = express();
+const expressFormidable = require('express-formidable');
 const port = process.env.port || 3000;
+app.use(expressFormidable());
 
 // Definiendo el esquema.
 const typeDefs = readFileSync(
@@ -24,13 +26,6 @@ app.use('/api', gqlMiddelware({
     graphiql: true
 }));
 
-// app.get('/', (req, res) => {
-//     res.json({
-//         status: true
-//     });
-// });
-
 app.listen(port, () => {
-    //console.log(`Server running on port ${port}`);
     console.log(`Server is running... url -> http://localhost:${port}/api`);
 });

@@ -5,6 +5,8 @@ const ctrMovieFormat = require('../controllers/ctrMovieFormat');
 const ctrRoom = require('../controllers/ctrRoom');
 const ctrMovie = require('../controllers/ctrMovie');
 const ctrUserOption = require('../controllers/ctrUserOption');
+const ctrUserRol = require('../controllers/ctrUserRol');
+const ctrUser = require('../controllers/ctrUser');
 
 module.exports = {
     addDistributor: ctrDistributor.add,
@@ -27,5 +29,11 @@ module.exports = {
     deleteMovie: ctrMovie.delete,
     addUserOption: ctrUserOption.add,
     updateUserOption: ctrUserOption.update,
-    deleteUserOption: ctrUserOption.delete
+    deleteUserOption: ctrUserOption.delete,
+    addUserRol: ctrUserRol.add,
+    updateUserRol: ctrUserRol.update,
+    deleteUserRol: ctrUserRol.delete,
+    addUser: ctrUser.add,
+    updateUser: ctrUser.update,
+    deleteUser: ctrUser.delete
 }

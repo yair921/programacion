@@ -180,6 +180,80 @@ input UserOptionInputUpdate {
     active: Boolean
 }
 
+type UserRol {
+    _id: ID!
+    nombre: String!
+    permissions: [UserRolPermission!]!
+    active: Boolean!
+}
+
+type UserRolPermission {
+    idUserOption: ID!
+    nameUserOption: String!
+    actions: [String!]!
+}
+
+input UserRolPermissionInput {
+    idUserOption: ID!
+    nameUserOption: String!
+    actions: [String!]!
+}
+
+type UserRolResGetAll {
+    status: Boolean
+    message: String
+    data: [UserRol]
+}
+
+input UserRolInput {
+    nombre: String!
+    permissions: [UserRolPermissionInput!]!
+}
+
+input UserRolInputUpdate {
+    nombre: String
+    permissions: [UserRolPermissionInput!]
+    active: Boolean
+}
+
+
+
+type User {
+    _id: ID!
+    idTheater: ID!
+    idUserRol: ID!
+    fullName: String!
+    email: String!
+    userName: String!
+    active: Boolean!
+}
+
+type UserResGetAll {
+    status: Boolean
+    message: String
+    data: [User]
+}
+
+input UserInput {
+    idUserRol: ID!
+    idTheater: ID!
+    fullName: String!
+    email: String!
+    userName: String!
+    password: String!
+}
+
+input UserInputUpdate {
+    idUserRol: ID
+    idTheater: ID
+    fullName: String
+    email: String
+    userName: String
+    password: String
+    active: Boolean
+}
+
+
 type Query {
     "Get all distributors"
     getAllDistributor: DistributorResGetAll
@@ -195,6 +269,10 @@ type Query {
     getAllMovie: MovieResGetAll
     "Get all user options"
     getAllUserOption: UserOptionResGetAll
+    "Get all user roles"
+    getAllUserRol: UserRolResGetAll
+    "Get all user"
+    getAllUser: UserResGetAll
 }
 
 type Mutation {
@@ -246,4 +324,18 @@ type Mutation {
     updateUserOption(_id: ID!, input: UserOptionInputUpdate!): UpdateDeleteResponse
     "Delete a user option"
     deleteUserOption(_id: ID!): UpdateDeleteResponse
+
+    "Add a user rol"
+    addUserRol(input: UserRolInput!): AddResponse
+    "Update a user rol"
+    updateUserRol(_id: ID!, input: UserRolInputUpdate!): UpdateDeleteResponse
+    "Delete a user Rol"
+    deleteUserRol(_id: ID!): UpdateDeleteResponse
+
+    "Add a user"
+    addUser(input: UserInput!): AddResponse
+    "Update a user"
+    updateUser(_id: ID!, input: UserInputUpdate!): UpdateDeleteResponse
+    "Delete a user"
+    deleteUser(_id: ID!): UpdateDeleteResponse
 }

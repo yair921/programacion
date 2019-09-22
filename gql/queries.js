@@ -5,6 +5,8 @@ const ctrMovieFormat = require('../controllers/ctrMovieFormat');
 const ctrRoom = require('../controllers/ctrRoom');
 const ctrMovie = require('../controllers/ctrMovie');
 const ctrUserOption = require('../controllers/ctrUserOption');
+const ctrUserRol = require('../controllers/ctrUserRol');
+const ctrUser = require('../controllers/ctrUser');
 
 
 module.exports = {
@@ -14,5 +16,7 @@ module.exports = {
     getAllMovieFormat: ctrMovieFormat.getAll,
     getAllRoom: ctrRoom.getAll,
     getAllMovie: ctrMovie.getAll,
-    getAllUserOption: ctrUserOption.getAll
+    getAllUserOption: ctrUserOption.getAll,
+    getAllUserRol: ctrUserRol.getAll,
+    getAllUser: ctrUser.getAll
 }

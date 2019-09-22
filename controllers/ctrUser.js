@@ -14,9 +14,11 @@ class CtrUser {
             data: [
                 {
                     _id: null,
-                    idTeatro: null,
-                    idUsuarioRol: null,
+                    idTheater: null,
                     nombre: null,
+                    email: null,
+                    userName: null,
+                    password: null,
                     active: null
                 }
             ]
@@ -30,7 +32,7 @@ class CtrUser {
             if (!objResult.status) {
                 errorHandler({
                     method: `${className}.getAll`,
-                    message: `${config.messages.errorConnectionDb} -> ${objCnn.message}`
+                    message: `${config.messages.errorConnectionDb} -> ${objResult.message}`
                 });
                 return resError
             }
@@ -54,15 +56,13 @@ class CtrUser {
                 dbName: config.db.programacion,
                 collectionName,
                 params: {
-                    nombre: args.input.nombre,
-                    idTeatro: ObjectID(args.input.idTeatro),
-                    idUsuarioRol: ObjectID(args.input.idUsuarioRol)
+                    userName: args.input.userName
                 }
             });
         if (exist) {
             return {
                 status: false,
-                message: `La sala ya existe en la base de datos`,
+                message: `The user name alredy exist!`,
                 _id: null
             };
         }
@@ -73,7 +73,9 @@ class CtrUser {
         try {
             let newObj = {
                 ...args.input,
-                idTeatro: ObjectID(args.input.idTeatro),
+                idUserRol: ObjectID(args.input.idUserRol),
+                idTheater: ObjectID(args.input.idTheater),
+                password: Helper.encrypt(args.input.password),
                 active: true,
                 enabled: true,
                 create_at: new Date(),
@@ -87,7 +89,7 @@ class CtrUser {
             if (!objResult.status) {
                 errorHandler({
                     method: `${className}.add`,
-                    message: `${config.messages.errorConnectionDb} -> ${objCnn.message}`
+                    message: `${config.messages.errorConnectionDb} -> ${objResult.message}`
                 });
                 return resError;
             }
@@ -109,8 +111,10 @@ class CtrUser {
         try {
             if (input.input.idTeatro)
                 input.input.idTeatro = ObjectID(input.input.idTeatro);
-            if (input.input.idUsuarioRol)
-                input.input.idUsuarioRol = ObjectID(input.input.idUsuarioRol);
+            if (input.input.idUserRol)
+                input.input.idUserRol = ObjectID(input.input.idUserRol);
+            if (input.input.password)
+                input.input.password = Helper.encrypt(input.input.password);
             let objResult = await Db.update({
                 dbName: config.db.programacion,
                 collectionName,
