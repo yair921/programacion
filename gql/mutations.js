@@ -1,30 +1,30 @@
-const ctrDistribuidor = require('../controllers/ctrDistribuidor');
-const ctrSalaTipo = require('../controllers/ctrSalaTipo');
-const ctrTeatro = require('../controllers/ctrTeatro');
-const ctrPeliculaFormato = require('../controllers/ctrPeliculaFormato');
-const ctrSala = require('../controllers/ctrSala');
-const ctrPelicula = require('../controllers/ctrPelicula');
+const ctrDistributor = require('../controllers/ctrDistributor');
+const ctrRoomType = require('../controllers/ctrRoomType');
+const ctrTheater = require('../controllers/ctrTheater');
+const ctrMovieFormat = require('../controllers/ctrMovieFormat');
+const ctrRoom = require('../controllers/ctrRoom');
+const ctrMovie = require('../controllers/ctrMovie');
 const ctrUserOption = require('../controllers/ctrUserOption');
 
 module.exports = {
-    addDistribuidor: ctrDistribuidor.add,
-    updateDistribuidor: ctrDistribuidor.update,
-    deleteDistribuidor: ctrDistribuidor.delete,
-    addSalaTipo: ctrSalaTipo.add,
-    updateSalaTipo: ctrSalaTipo.update,
-    deleteSalaTipo: ctrSalaTipo.delete,
-    addTeatro: ctrTeatro.add,
-    updateTeatro: ctrTeatro.update,
-    deleteTeatro: ctrTeatro.delete,
-    addPeliculaFormato: ctrPeliculaFormato.add,
-    updatePeliculaFormato: ctrPeliculaFormato.update,
-    deletePeliculaFormato: ctrPeliculaFormato.delete,
-    addSala: ctrSala.add,
-    updateSala: ctrSala.update,
-    deleteSala: ctrSala.delete,
-    addPelicula: ctrPelicula.add,
-    updatePelicula: ctrPelicula.update,
-    deletePelicula: ctrPelicula.delete,
+    addDistributor: ctrDistributor.add,
+    updateDistributor: ctrDistributor.update,
+    deleteDistributor: ctrDistributor.delete,
+    addRoomType: ctrRoomType.add,
+    updateRoomType: ctrRoomType.update,
+    deleteRoomType: ctrRoomType.delete,
+    addTheater: ctrTheater.add,
+    updateTheater: ctrTheater.update,
+    deleteTheater: ctrTheater.delete,
+    addMovieFormat: ctrMovieFormat.add,
+    updateMovieFormat: ctrMovieFormat.update,
+    deleteMovieFormat: ctrMovieFormat.delete,
+    addRoom: ctrRoom.add,
+    updateRoom: ctrRoom.update,
+    deleteRoom: ctrRoom.delete,
+    addMovie: ctrMovie.add,
+    updateMovie: ctrMovie.update,
+    deleteMovie: ctrMovie.delete,
     addUserOption: ctrUserOption.add,
     updateUserOption: ctrUserOption.update,
     deleteUserOption: ctrUserOption.delete

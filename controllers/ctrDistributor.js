@@ -2,10 +2,10 @@ const { errorHandler } = require('../utility/errorHandler');
 const Db = require('../utility/db');
 const config = require('../config');
 const Helper = require('../utility/helper');
-const className = 'CtrTeatro';
-const collectionName = 'teatro';
+const className = 'CtrDistributor';
+const collectionName = 'distributor';
 
-class CtrTeatro {
+class CtrDistributor {
 
     static async getAll() {
         let resError = {
@@ -14,6 +14,7 @@ class CtrTeatro {
                 {
                     _id: null,
                     nombre: null,
+                    id_filcal: null,
                     active: null
                 }
             ]
@@ -50,12 +51,12 @@ class CtrTeatro {
             {
                 dbName: config.db.programacion,
                 collectionName,
-                params: { nombre: args.input.nombre }
+                params: { id_fiscal: args.input.id_fiscal }
             });
         if (exist) {
             return {
                 status: false,
-                message: `El teatro ya existe en la base de datos`,
+                message: `The distributor already exists in the database!`,
                 _id: null
             };
         }
@@ -150,4 +151,4 @@ class CtrTeatro {
     }
 }
 
-module.exports = CtrTeatro;
+module.exports = CtrDistributor;

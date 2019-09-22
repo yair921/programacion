@@ -1,11 +1,12 @@
+const { ObjectID } = require('mongodb');
 const { errorHandler } = require('../utility/errorHandler');
 const Db = require('../utility/db');
 const config = require('../config');
 const Helper = require('../utility/helper');
-const className = 'CtrSalasTipo';
-const collectionName = 'sala_tipo';
+const className = 'CtrMovie';
+const collectionName = 'movie';
 
-class CtrSalasTipo {
+class CtrMovie {
 
     static async getAll() {
         let resError = {
@@ -13,6 +14,8 @@ class CtrSalasTipo {
             data: [
                 {
                     _id: null,
+                    idDistributor: null,
+                    idsMovieFormat: null,
                     nombre: null,
                     active: null
                 }
@@ -50,12 +53,14 @@ class CtrSalasTipo {
             {
                 dbName: config.db.programacion,
                 collectionName,
-                params: { nombre: args.input.nombre }
+                params: {
+                    nombre: args.input.nombre
+                }
             });
         if (exist) {
             return {
                 status: false,
-                message: `La sala ya existe en la base de datos!`,
+                message: `The movie already exist in the database!`,
                 _id: null
             };
         }
@@ -66,6 +71,8 @@ class CtrSalasTipo {
         try {
             let newObj = {
                 ...args.input,
+                idDistributor: ObjectID(args.input.idDistributor),
+                idsMovieFormat: args.input.idsMovieFormat.map(m => ObjectID(m)),
                 active: true,
                 enabled: true,
                 create_at: new Date(),
@@ -99,6 +106,10 @@ class CtrSalasTipo {
 
     static async update(root, input) {
         try {
+            if (input.input.idDistributor)
+                input.input.idDistributor = ObjectID(input.input.idDistributor);
+            if (input.input.idsMovieFormat)
+                input.input.idsMovieFormat = input.input.idsMovieFormat.map(m => ObjectID(m));
             let objResult = await Db.update({
                 dbName: config.db.programacion,
                 collectionName,
@@ -150,4 +161,4 @@ class CtrSalasTipo {
     }
 }
 
-module.exports = CtrSalasTipo;
+module.exports = CtrMovie;

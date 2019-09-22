@@ -1,12 +1,11 @@
-const { ObjectID } = require('mongodb');
 const { errorHandler } = require('../utility/errorHandler');
 const Db = require('../utility/db');
 const config = require('../config');
 const Helper = require('../utility/helper');
-const className = 'CtrSala';
-const collectionName = 'sala';
+const className = 'CtrMovieFormat';
+const collectionName = 'movie_format';
 
-class CtrSala {
+class CtrMovieFormat {
 
     static async getAll() {
         let resError = {
@@ -14,7 +13,6 @@ class CtrSala {
             data: [
                 {
                     _id: null,
-                    idTeatro: null,
                     nombre: null,
                     active: null
                 }
@@ -52,12 +50,12 @@ class CtrSala {
             {
                 dbName: config.db.programacion,
                 collectionName,
-                params: { nombre: args.input.nombre, idTeatro: ObjectID(args.input.idTeatro) }
+                params: { nombre: args.input.nombre }
             });
         if (exist) {
             return {
                 status: false,
-                message: `La sala ya existe en la base de datos`,
+                message: `The format already exist!`,
                 _id: null
             };
         }
@@ -68,7 +66,6 @@ class CtrSala {
         try {
             let newObj = {
                 ...args.input,
-                idTeatro: ObjectID(args.input.idTeatro),
                 active: true,
                 enabled: true,
                 create_at: new Date(),
@@ -102,8 +99,6 @@ class CtrSala {
 
     static async update(root, input) {
         try {
-            if (input.input.idTeatro)
-                input.input.idTeatro = ObjectID(input.input.idTeatro);
             let objResult = await Db.update({
                 dbName: config.db.programacion,
                 collectionName,
@@ -155,4 +150,4 @@ class CtrSala {
     }
 }
 
-module.exports = CtrSala;
+module.exports = CtrMovieFormat;

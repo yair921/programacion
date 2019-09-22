@@ -2,10 +2,10 @@ const { errorHandler } = require('../utility/errorHandler');
 const Db = require('../utility/db');
 const config = require('../config');
 const Helper = require('../utility/helper');
-const className = 'CtrPeliculaFormato';
-const collectionName = 'pelicula_formato';
+const className = 'CtrRoomType';
+const collectionName = 'room_type';
 
-class CtrPeliculaFormato {
+class CtrRoomType {
 
     static async getAll() {
         let resError = {
@@ -55,7 +55,7 @@ class CtrPeliculaFormato {
         if (exist) {
             return {
                 status: false,
-                message: `El formato ya existe en la base de datos!`,
+                message: `La sala ya existe en la base de datos!`,
                 _id: null
             };
         }
@@ -150,4 +150,4 @@ class CtrPeliculaFormato {
     }
 }
 
-module.exports = CtrPeliculaFormato;
+module.exports = CtrRoomType;

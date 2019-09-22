@@ -1,18 +1,18 @@
-const ctrDistribuidor = require('../controllers/ctrDistribuidor');
-const ctrSalaTipo = require('../controllers/ctrSalaTipo');
-const ctrTeatro = require('../controllers/ctrTeatro');
-const ctrPeliculaFormato = require('../controllers/ctrPeliculaFormato');
-const ctrSala = require('../controllers/ctrSala');
-const ctrPelicula = require('../controllers/ctrPelicula');
+const ctrDistributor = require('../controllers/ctrDistributor');
+const ctrRoomType = require('../controllers/ctrRoomType');
+const ctrTheater = require('../controllers/ctrTheater');
+const ctrMovieFormat = require('../controllers/ctrMovieFormat');
+const ctrRoom = require('../controllers/ctrRoom');
+const ctrMovie = require('../controllers/ctrMovie');
 const ctrUserOption = require('../controllers/ctrUserOption');
 
 
 module.exports = {
-    getAllDistribuidor: ctrDistribuidor.getAll,
-    getAllSalaTipo: ctrSalaTipo.getAll,
-    getAllTeatro: ctrTeatro.getAll,
-    getAllPeliculaFormato: ctrPeliculaFormato.getAll,
-    getAllSala: ctrSala.getAll,
-    getAllPelicula: ctrPelicula.getAll,
+    getAllDistributor: ctrDistributor.getAll,
+    getAllRoomType: ctrRoomType.getAll,
+    getAllTheater: ctrTheater.getAll,
+    getAllMovieFormat: ctrMovieFormat.getAll,
+    getAllRoom: ctrRoom.getAll,
+    getAllMovie: ctrMovie.getAll,
     getAllUserOption: ctrUserOption.getAll
 }

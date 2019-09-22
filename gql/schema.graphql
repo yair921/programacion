@@ -9,153 +9,152 @@ type UpdateDeleteResponse {
     message: String
 }
 
-type Distribuidor {
+type Distributor {
     _id: ID!
     id_fiscal: String!
     nombre: String!
     active: Boolean!
 }
 
-type DistribuidorResGetAll {
+type DistributorResGetAll {
     status: Boolean
     message: String
-    data: [Distribuidor]
+    data: [Distributor]
 }
 
-input DistribuidorInput {
+input DistributorInput {
     nombre: String!
     id_fiscal: String!
 }
 
-input DistribuidorInputUpdate {
+input DistributorInputUpdate {
     nombre: String
     id_fiscal: String
     active: Boolean
 }
 
-type SalaTipo {
+type RoomType {
     _id: ID!
     nombre: String!
     active: Boolean!
 }
 
-type SalaTipoResGetAll {
+type RoomTypeResGetAll {
     status: Boolean
     message: String
-    data: [SalaTipo]
+    data: [RoomType]
 }
 
-input SalaTipoInput {
+input RoomTypeInput {
     nombre: String!
 }
 
-input SalaTipoInputUpdate {
+input RoomTypeInputUpdate {
     nombre: String
     active: Boolean
 }
 
-type Teatro {
+type Theater {
     _id: ID!
     nombre: String!
     active: Boolean!
 }
 
-type TeatroResGetAll {
+type TheaterResGetAll {
     status: Boolean
     message: String
-    data: [Teatro]
+    data: [Theater]
 }
 
-input TeatroInput {
+input TheaterInput {
     nombre: String!
 }
 
-input TeatroInputUpdate {
+input TheaterInputUpdate {
     nombre: String
     active: Boolean
 }
 
-type PeliculaFormato {
+type MovieFormat {
     _id: ID!
     nombre: String!
     active: Boolean!
 }
 
-type PeliculaFormatoResGetAll {
+type MovieFormatResGetAll {
     status: Boolean
     message: String
-    data: [PeliculaFormato]
+    data: [MovieFormat]
 }
 
-input PeliculaFormatoInput {
+input MovieFormatInput {
     nombre: String!
 }
 
-input PeliculaFormatoInputUpdate {
+input MovieFormatInputUpdate {
     nombre: String
     active: Boolean
 }
 
-type Sala {
+type Room {
     _id: ID!
-    idTeatro: ID!
+    idTheater: ID!
     nombre: String!
-    cantidadSilla: Int!
+    numberChairs: Int!
     cleaningTime: Int!
     active: Boolean!
 }
 
-type SalaResGetAll {
+type RoomResGetAll {
     status: Boolean
     message: String
-    data: [Sala]
+    data: [Room]
 }
 
-input SalaInput {
-    idTeatro: ID!
+input RoomInput {
+    idTheater: ID!
     nombre: String!
-    cantidadSilla: Int!
+    numberChairs: Int!
     cleaningTime: Int!
 }
 
-input SalaInputUpdate {
-    idTeatro: ID
+input RoomInputUpdate {
+    idTheater: ID
     nombre: String
-    cantidadSilla: Int
+    numberChairs: Int
     cleaningTime: Int
     active: Boolean
 }
 
-type Pelicula {
+type Movie {
     _id: ID!
-    idsPeliculaFormato: [ID!]!
+    idDistributor: ID!
+    idsMovieFormat: [ID!]!
     nombre: String!
     duration: Int!
     active: Boolean!
 }
 
-type PeliculaResGetAll {
+type MovieResGetAll {
     status: Boolean
     message: String
-    data: [Pelicula]
+    data: [Movie]
 }
 
-input PeliculaInput {
-    idsPeliculaFormato: [ID!]!
+input MovieInput {
+    idDistributor: ID!
+    idsMovieFormat: [ID!]!
     nombre: String!
     duration: Int!
 }
 
-input PeliculaInputUpdate {
-    idsPeliculaFormato: [ID!]
+input MovieInputUpdate {
+    idDistributor: ID
+    idsMovieFormat: [ID!]
     nombre: String
     duration: Int
     active: Boolean
 }
-
-
-
-
 
 type UserOption {
     _id: ID!
@@ -181,74 +180,70 @@ input UserOptionInputUpdate {
     active: Boolean
 }
 
-
-
-
-
 type Query {
-    "Obtener todos los distribuidores"
-    getAllDistribuidor: DistribuidorResGetAll
-    "Obtener todos los tipos de sala"
-    getAllSalaTipo: SalaTipoResGetAll 
-    "Obtener todos los teatros"
-    getAllTeatro: TeatroResGetAll
-    "Obtener todos los Formatos de Peliculas"
-    getAllPeliculaFormato: PeliculaFormatoResGetAll
-    "Obtener todas las salas"
-    getAllSala: SalaResGetAll
-    "Obtener todas las películas"
-    getAllPelicula: PeliculaResGetAll
-    "Obtener todas las opciones de los usuarios"
+    "Get all distributors"
+    getAllDistributor: DistributorResGetAll
+    "Get all room types"
+    getAllRoomType: RoomTypeResGetAll 
+    "Get all theaters"
+    getAllTheater: TheaterResGetAll
+    "Get all movie formats"
+    getAllMovieFormat: MovieFormatResGetAll
+    "Get all rooms"
+    getAllRoom: RoomResGetAll
+    "Get al movies"
+    getAllMovie: MovieResGetAll
+    "Get all user options"
     getAllUserOption: UserOptionResGetAll
 }
 
 type Mutation {
-    "Agregar un nuevo distribuidor"
-    addDistribuidor(input: DistribuidorInput!): AddResponse
-    "Actualizar un distribuidor"
-    updateDistribuidor(_id: ID!, input: DistribuidorInputUpdate!): UpdateDeleteResponse
-    "Eliminar un distribuidor"
-    deleteDistribuidor(_id: ID!): UpdateDeleteResponse
+    "Add new distributor"
+    addDistributor(input: DistributorInput!): AddResponse
+    "Update distributor"
+    updateDistributor(_id: ID!, input: DistributorInputUpdate!): UpdateDeleteResponse
+    "Delete distributor"
+    deleteDistributor(_id: ID!): UpdateDeleteResponse
 
-    "Agregar una nueva salaTipo"
-    addSalaTipo(input: SalaTipoInput!): AddResponse
-    "Actualizar una salaTipo"
-    updateSalaTipo(_id: ID!, input: SalaTipoInputUpdate!): UpdateDeleteResponse
-    "Eliminar una salaTipo"
-    deleteSalaTipo(_id: ID!): UpdateDeleteResponse
+    "Add a new room type"
+    addRoomType(input: RoomTypeInput!): AddResponse
+    "Update a room type"
+    updateRoomType(_id: ID!, input: RoomTypeInputUpdate!): UpdateDeleteResponse
+    "Delete a room type"
+    deleteRoomType(_id: ID!): UpdateDeleteResponse
 
-    "Agregar un nuevo teatro"
-    addTeatro(input: TeatroInput!): AddResponse
-    "Actualizar un teatro"
-    updateTeatro(_id: ID!, input: TeatroInputUpdate!): UpdateDeleteResponse
-    "Eliminar un teatro"
-    deleteTeatro(_id: ID!): UpdateDeleteResponse
+    "Add a new theater"
+    addTheater(input: TheaterInput!): AddResponse
+    "Update a theater"
+    updateTheater(_id: ID!, input: TheaterInputUpdate!): UpdateDeleteResponse
+    "Delete a theater"
+    deleteTheater(_id: ID!): UpdateDeleteResponse
 
-    "Agregar un nuevo formato de película"
-    addPeliculaFormato(input: PeliculaFormatoInput!): AddResponse
-    "Actualizar un formato de película"
-    updatePeliculaFormato(_id: ID!, input: PeliculaFormatoInputUpdate!): UpdateDeleteResponse
-    "Eliminar un formato de película"
-    deletePeliculaFormato(_id: ID!): UpdateDeleteResponse
+    "Add a new movie format"
+    addMovieFormat(input: MovieFormatInput!): AddResponse
+    "Update a movie format"
+    updateMovieFormat(_id: ID!, input: MovieFormatInputUpdate!): UpdateDeleteResponse
+    "Delete a movie format"
+    deleteMovieFormat(_id: ID!): UpdateDeleteResponse
 
-    "Agregar una sala"
-    addSala(input: SalaInput!): AddResponse
-    "Actualizar una sala"
-    updateSala(_id: ID!, input: SalaInputUpdate!): UpdateDeleteResponse
-    "Eliminar una sala"
-    deleteSala(_id: ID!): UpdateDeleteResponse
+    "Add a room"
+    addRoom(input: RoomInput!): AddResponse
+    "Update a room"
+    updateRoom(_id: ID!, input: RoomInputUpdate!): UpdateDeleteResponse
+    "Delete a room"
+    deleteRoom(_id: ID!): UpdateDeleteResponse
 
-    "Agregar una Película"
-    addPelicula(input: PeliculaInput!): AddResponse
-    "Actualizar una película"
-    updatePelicula(_id: ID!, input: PeliculaInputUpdate!): UpdateDeleteResponse
-    "Eliminar una película"
-    deletePelicula(_id: ID!): UpdateDeleteResponse
+    "Add a movie"
+    addMovie(input: MovieInput!): AddResponse
+    "Update a movie"
+    updateMovie(_id: ID!, input: MovieInputUpdate!): UpdateDeleteResponse
+    "Delete a movie"
+    deleteMovie(_id: ID!): UpdateDeleteResponse
 
-    "Agregar una opción de usuario"
+    "Add a user option"
     addUserOption(input: UserOptionInput!): AddResponse
-    "Actualizar una opción de usuario"
+    "Update a user option"
     updateUserOption(_id: ID!, input: UserOptionInputUpdate!): UpdateDeleteResponse
-    "Eliminar una opción de usuario"
+    "Delete a user option"
     deleteUserOption(_id: ID!): UpdateDeleteResponse
 }
