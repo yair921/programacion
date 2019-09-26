@@ -8,9 +8,9 @@ const { readFileSync } = require('fs');
 const { join } = require('path');
 const resolvers = require('./gql/resolvers');
 const app = express();
-const expressFormidable = require('express-formidable');
+//const expressFormidable = require('express-formidable');
 const port = process.env.port || 3000;
-app.use(expressFormidable());
+//app.use(expressFormidable());
 
 // Definiendo el esquema.
 const typeDefs = readFileSync(
