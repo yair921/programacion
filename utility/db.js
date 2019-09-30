@@ -28,6 +28,37 @@ class Db {
         this.database = process.env.DB_NAME;
     }
 
+    static async findOne(args) {
+        let objCnn = null;
+        try {
+            objCnn = await Db.openConnection();
+            if (!objCnn.status) {
+                return objCnn;
+            }
+            let db = objCnn.client.db(args.dbName);
+            let collection = db.collection(args.collectionName);
+            let result = await collection.findOne(args.params);
+            if (!result) {
+                return {
+                    status: false,
+                    message: `Result findOne method is null or undefined.`
+                };
+            }
+            return {
+                status: true,
+                result
+            };
+        } catch (error) {
+            return {
+                status: false,
+                message: error
+            };
+        } finally {
+            if (objCnn && objCnn.client)
+                objCnn.client.close();
+        }
+    }
+
     static async find(args) {
         let objCnn = null;
         try {
@@ -57,6 +88,27 @@ class Db {
             if (objCnn && objCnn.client)
                 objCnn.client.close();
         }
+    }
+
+    static async findAggrupate(args) {
+        let objCnn = null;
+        objCnn = await Db.openConnection();
+        if (!objCnn.status) {
+            return objCnn;
+        }
+        let db = objCnn.client.db(args.dbName);
+        let collection = db.collection(args.collectionName);
+        let result = await collection.aggregate(args.pipeline).toArray();
+        if (!result) {
+            return {
+                status: false,
+                message: 'Can not get result from agggregate'
+            };
+        }
+        return {
+            status: true,
+            result
+        };
     }
 
     static async insertOne(args) {

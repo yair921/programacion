@@ -10,9 +10,11 @@ module.exports = {
         addFail: { status: false, message: `No se ha podido agregar el registro.` },
         updateFail: { status: false, message: `No se ha podido actualizar el registro.` },
         deleteFail: { status: false, message: `No se ha podido eliminar el registro.` },
-        getFail: { status: false, message: `No se ha podido realizar la consulta.` }
+        getFail: { status: false, message: `No se ha podido realizar la consulta.` },
+        unauthorized: 'Unauthorized to this operation.'
     },
     db: {
         programacion: 'procinal-programacion'
-    }
+    },
+    secretKey: 'th3S3cr3tK3yM0$tP0pul4r'
 };

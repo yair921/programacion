@@ -7,6 +7,7 @@ const ctrMovie = require('../controllers/ctrMovie');
 const ctrUserOption = require('../controllers/ctrUserOption');
 const ctrUserRol = require('../controllers/ctrUserRol');
 const ctrUser = require('../controllers/ctrUser');
+const ctrAuth = require('../controllers/ctrAuth');
 
 
 module.exports = {
@@ -18,5 +19,6 @@ module.exports = {
     getAllMovie: ctrMovie.getAll,
     getAllUserOption: ctrUserOption.getAll,
     getAllUserRol: ctrUserRol.getAll,
-    getAllUser: ctrUser.getAll
+    getAllUser: ctrUser.getAll,
+    getLogin: ctrAuth.login
 }

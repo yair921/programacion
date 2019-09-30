@@ -1,5 +1,6 @@
 const { ObjectID } = require('mongodb');
 const { errorHandler } = require('../utility/errorHandler');
+const ctrAuth = require('./ctrAuth');
 const Db = require('../utility/db');
 const config = require('../config');
 const Helper = require('../utility/helper');
@@ -8,21 +9,37 @@ const collectionName = 'user';
 
 class CtrUser {
 
-    static async getAll() {
+    static async getAll(global, { token }) {
+
+        // Build object error.
         let resError = {
             ...config.messages.getFail,
-            data: [
-                {
-                    _id: null,
-                    idTheater: null,
-                    nombre: null,
-                    email: null,
-                    userName: null,
-                    password: null,
-                    active: null
-                }
-            ]
+            data: null
         };
+
+        // Validation token.
+        let auth = ctrAuth.validateLogin(token);
+        if (!auth.status) {
+            return {
+                ...resError,
+                message: auth.message
+            };
+        }
+
+        let objPermission = auth.decode.objUserRol[0].permissions.filter(f => f.nameUserOption === collectionName)
+        if (objPermission.length === 0) {
+            return {
+                ...resError,
+                message: config.messages.unauthorized
+            };
+        }
+        if (objPermission[0].actions.filter(f => f === 'get').length===0) {
+            return {
+                ...resError,
+                message: config.messages.unauthorized
+            };
+        }
+
         try {
             let objResult = await Db.find({
                 dbName: config.db.programacion,
@@ -50,7 +67,7 @@ class CtrUser {
         }
     }
 
-    static async add(root, args) {
+    static async add(global, args) {
         let exist = await Helper.validateIfExist(
             {
                 dbName: config.db.programacion,
@@ -75,7 +92,7 @@ class CtrUser {
                 ...args.input,
                 idUserRol: ObjectID(args.input.idUserRol),
                 idTheater: ObjectID(args.input.idTheater),
-                password: Helper.encrypt(args.input.password),
+                password: await Helper.encrypt(args.input.password),
                 active: true,
                 enabled: true,
                 create_at: new Date(),
@@ -107,14 +124,14 @@ class CtrUser {
         }
     }
 
-    static async update(root, input) {
+    static async update(global, input) {
         try {
             if (input.input.idTeatro)
                 input.input.idTeatro = ObjectID(input.input.idTeatro);
             if (input.input.idUserRol)
                 input.input.idUserRol = ObjectID(input.input.idUserRol);
             if (input.input.password)
-                input.input.password = Helper.encrypt(input.input.password);
+                input.input.password = await Helper.encrypt(input.input.password);
             let objResult = await Db.update({
                 dbName: config.db.programacion,
                 collectionName,
@@ -141,7 +158,7 @@ class CtrUser {
         }
     }
 
-    static async delete(root, input) {
+    static async delete(global, input) {
         try {
             let objResult = await Db.delete({
                 dbName: config.db.programacion,
@@ -164,6 +181,7 @@ class CtrUser {
             return config.messages.errorUnexpected;
         }
     }
+
 }
 
 module.exports = CtrUser;
