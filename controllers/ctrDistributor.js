@@ -86,7 +86,7 @@ class CtrDistributor {
             }
             return {
                 status: true,
-                message: null,
+                message: config.messages.addSuccesss,
                 _id: objResult._id
             }
         } catch (error) {
