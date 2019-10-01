@@ -252,7 +252,6 @@ type UserResGetAll {
 }
 
 input UserInput {
-    token: String!
     idUserRol: ID!
     idTheater: ID!
     fullName: String!
@@ -308,65 +307,65 @@ type Query {
 
 type Mutation {
     "Add new distributor"
-    addDistributor(input: DistributorInput!): AddResponse
+    addDistributor(token: String!, input: DistributorInput!): AddResponse
     "Update distributor"
-    updateDistributor(_id: ID!, input: DistributorInputUpdate!): UpdateDeleteResponse
+    updateDistributor(token: String!, _id: ID!, input: DistributorInputUpdate!): UpdateDeleteResponse
     "Delete distributor"
-    deleteDistributor(_id: ID!): UpdateDeleteResponse
+    deleteDistributor(token: String!, _id: ID!): UpdateDeleteResponse
 
     "Add a new room type"
-    addRoomType(input: RoomTypeInput!): AddResponse
+    addRoomType(token: String!, input: RoomTypeInput!): AddResponse
     "Update a room type"
-    updateRoomType(_id: ID!, input: RoomTypeInputUpdate!): UpdateDeleteResponse
+    updateRoomType(token: String!, _id: ID!, input: RoomTypeInputUpdate!): UpdateDeleteResponse
     "Delete a room type"
-    deleteRoomType(_id: ID!): UpdateDeleteResponse
+    deleteRoomType(token: String!, _id: ID!): UpdateDeleteResponse
 
     "Add a new theater"
-    addTheater(input: TheaterInput!): AddResponse
+    addTheater(token: String!, input: TheaterInput!): AddResponse
     "Update a theater"
-    updateTheater(_id: ID!, input: TheaterInputUpdate!): UpdateDeleteResponse
+    updateTheater(token: String!, _id: ID!, input: TheaterInputUpdate!): UpdateDeleteResponse
     "Delete a theater"
-    deleteTheater(_id: ID!): UpdateDeleteResponse
+    deleteTheater(token: String!, _id: ID!): UpdateDeleteResponse
 
     "Add a new movie format"
-    addMovieFormat(input: MovieFormatInput!): AddResponse
+    addMovieFormat(token: String!, input: MovieFormatInput!): AddResponse
     "Update a movie format"
-    updateMovieFormat(_id: ID!, input: MovieFormatInputUpdate!): UpdateDeleteResponse
+    updateMovieFormat(token: String!, _id: ID!, input: MovieFormatInputUpdate!): UpdateDeleteResponse
     "Delete a movie format"
-    deleteMovieFormat(_id: ID!): UpdateDeleteResponse
+    deleteMovieFormat(token: String!, _id: ID!): UpdateDeleteResponse
 
     "Add a room"
-    addRoom(input: RoomInput!): AddResponse
+    addRoom(token: String!, input: RoomInput!): AddResponse
     "Update a room"
-    updateRoom(_id: ID!, input: RoomInputUpdate!): UpdateDeleteResponse
+    updateRoom(token: String!, _id: ID!, input: RoomInputUpdate!): UpdateDeleteResponse
     "Delete a room"
-    deleteRoom(_id: ID!): UpdateDeleteResponse
+    deleteRoom(token: String!, _id: ID!): UpdateDeleteResponse
 
     "Add a movie"
-    addMovie(input: MovieInput!): AddResponse
+    addMovie(token: String!, input: MovieInput!): AddResponse
     "Update a movie"
-    updateMovie(_id: ID!, input: MovieInputUpdate!): UpdateDeleteResponse
+    updateMovie(token: String!, _id: ID!, input: MovieInputUpdate!): UpdateDeleteResponse
     "Delete a movie"
-    deleteMovie(_id: ID!): UpdateDeleteResponse
+    deleteMovie(token: String!, _id: ID!): UpdateDeleteResponse
 
     "Add a user option"
-    addUserOption(input: UserOptionInput!): AddResponse
+    addUserOption(token: String!, input: UserOptionInput!): AddResponse
     "Update a user option"
-    updateUserOption(_id: ID!, input: UserOptionInputUpdate!): UpdateDeleteResponse
+    updateUserOption(token: String!, _id: ID!, input: UserOptionInputUpdate!): UpdateDeleteResponse
     "Delete a user option"
-    deleteUserOption(_id: ID!): UpdateDeleteResponse
+    deleteUserOption(token: String!, _id: ID!): UpdateDeleteResponse
 
     "Add a user rol"
-    addUserRol(input: UserRolInput!): AddResponse
+    addUserRol(token: String!, input: UserRolInput!): AddResponse
     "Update a user rol"
     updateUserRol(_id: ID!, input: UserRolInputUpdate!): UpdateDeleteResponse
     "Delete a user Rol"
-    deleteUserRol(_id: ID!): UpdateDeleteResponse
+    deleteUserRol(token: String!, _id: ID!): UpdateDeleteResponse
 
     "Add a user"
-    addUser(input: UserInput!): AddResponse
+    addUser(token: String!, input: UserInput!): AddResponse
     "Update a user"
-    updateUser(_id: ID!, input: UserInputUpdate!): UpdateDeleteResponse
+    updateUser(token: String!, _id: ID!, input: UserInputUpdate!): UpdateDeleteResponse
     "Delete a user"
-    deleteUser(_id: ID!): UpdateDeleteResponse
+    deleteUser(token: String!, _id: ID!): UpdateDeleteResponse
 }

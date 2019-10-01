@@ -91,7 +91,8 @@ class CtrAuth {
         };
     }
 
-    static validateLogin(token) {
+    static validateLogin({ token, option, action }) {
+        // Validate if token is not empty.
         if (!token) {
             return {
                 status: false,
@@ -106,9 +107,24 @@ class CtrAuth {
                     message: 'Worg token.'
                 };
             }
+            // Validation permissions.
+            let objOption = decode.objUserRol[0].permissions.filter(f => f.nameUserOption === option);
+            if (objOption.length === 0) {
+                return {
+                    status: false,
+                    message: config.messages.unauthorized
+                };
+            }
+
+            // Validation actions permissions.
+            if (objOption[0].actions.filter(f => f.toLowerCase() === action).length === 0) {
+                return {
+                    status: false,
+                    message: config.messages.unauthorized
+                };
+            }
             return {
-                status: true,
-                decode
+                status: true
             }
         } catch (error) {
             return {

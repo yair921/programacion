@@ -17,26 +17,12 @@ class CtrUser {
             data: null
         };
 
-        // Validation token.
-        let auth = ctrAuth.validateLogin(token);
+        // Validation permissions.
+        let auth = ctrAuth.validateLogin({ token, option: collectionName, action: config.actions.get });
         if (!auth.status) {
             return {
                 ...resError,
                 message: auth.message
-            };
-        }
-
-        let objPermission = auth.decode.objUserRol[0].permissions.filter(f => f.nameUserOption === collectionName)
-        if (objPermission.length === 0) {
-            return {
-                ...resError,
-                message: config.messages.unauthorized
-            };
-        }
-        if (objPermission[0].actions.filter(f => f === 'get').length===0) {
-            return {
-                ...resError,
-                message: config.messages.unauthorized
             };
         }
 
@@ -68,25 +54,36 @@ class CtrUser {
     }
 
     static async add(global, args) {
-        let exist = await Helper.validateIfExist(
-            {
-                dbName: config.db.programacion,
-                collectionName,
-                params: {
-                    userName: args.input.userName
-                }
-            });
-        if (exist) {
-            return {
-                status: false,
-                message: `The user name alredy exist!`,
-                _id: null
-            };
-        }
+
+        // Build object error.
         let resError = {
             ...config.messages.addFail,
             _id: null
-        };
+        }
+
+        // Validation permissions.
+        let auth = ctrAuth.validateLogin({ token: args.token, option: collectionName, action: config.actions.add });
+        if (!auth.status) {
+            return {
+                ...resError,
+                message: auth.message
+            };
+        }
+
+        let exist = await Helper.validateIfExist({
+            dbName: config.db.programacion,
+            collectionName,
+            params: {
+                userName: args.input.userName
+            }
+        });
+        if (exist) {
+            return {
+                status: false,
+                message: `The userName alredy exist!`,
+                _id: null
+            };
+        }
         try {
             let newObj = {
                 ...args.input,
@@ -112,7 +109,7 @@ class CtrUser {
             }
             return {
                 status: true,
-                message: null,
+                message: config.messages.addSuccesss,
                 _id: objResult._id
             }
         } catch (error) {
@@ -124,19 +121,27 @@ class CtrUser {
         }
     }
 
-    static async update(global, input) {
+    static async update(global, args) {
         try {
-            if (input.input.idTeatro)
-                input.input.idTeatro = ObjectID(input.input.idTeatro);
-            if (input.input.idUserRol)
-                input.input.idUserRol = ObjectID(input.input.idUserRol);
-            if (input.input.password)
-                input.input.password = await Helper.encrypt(input.input.password);
+            // Validation permissions.
+            let auth = ctrAuth.validateLogin({ token: args.token, option: collectionName, action: config.actions.update });
+            if (!auth.status) {
+                return {
+                    status: false,
+                    message: auth.message
+                };
+            }
+            if (args.input.idTeatro)
+                args.input.idTeatro = ObjectID(args.input.idTeatro);
+            if (args.input.idUserRol)
+                args.input.idUserRol = ObjectID(args.input.idUserRol);
+            if (args.input.password)
+                args.input.password = await Helper.encrypt(args.input.password);
             let objResult = await Db.update({
                 dbName: config.db.programacion,
                 collectionName,
-                _id: input._id,
-                set: { ...input.input, updated_at: new Date() }
+                _id: args._id,
+                set: { ...args.input, updated_at: new Date() }
             });
             if (!objResult.status) {
                 errorHandler({
@@ -158,12 +163,20 @@ class CtrUser {
         }
     }
 
-    static async delete(global, input) {
+    static async delete(global, args) {
         try {
+            // Validation permissions.
+            let auth = ctrAuth.validateLogin({ token: args.token, option: collectionName, action: config.actions.delete });
+            if (!auth.status) {
+                return {
+                    status: false,
+                    message: auth.message
+                };
+            }
             let objResult = await Db.delete({
                 dbName: config.db.programacion,
                 collectionName,
-                _id: input._id
+                _id: args._id
             });
             if (!objResult.status) {
                 errorHandler({
