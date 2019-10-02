@@ -1,4 +1,5 @@
 const { errorHandler } = require('../utility/errorHandler');
+const ctrAuth = require('./ctrAuth');
 const Db = require('../utility/db');
 const config = require('../config');
 const Helper = require('../utility/helper');
@@ -7,7 +8,9 @@ const collectionName = 'distributor';
 
 class CtrDistributor {
 
-    static async getAll() {
+    static async getAll(global, { token }) {
+
+        // Build object error.
         let resError = {
             ...config.messages.getFail,
             data: [
@@ -19,6 +22,16 @@ class CtrDistributor {
                 }
             ]
         };
+
+        // Validation permissions.
+        let auth = ctrAuth.validateLogin({ token, option: collectionName, action: config.actions.get });
+        if (!auth.status) {
+            return {
+                ...resError,
+                message: auth.message
+            };
+        }
+
         try {
             let objResult = await Db.find({
                 dbName: config.db.programacion,
@@ -46,13 +59,28 @@ class CtrDistributor {
         }
     }
 
-    static async add(root, args) {
-        let exist = await Helper.validateIfExist(
-            {
-                dbName: config.db.programacion,
-                collectionName,
-                params: { id_fiscal: args.input.id_fiscal }
-            });
+    static async add(global, args) {
+
+        // Build object error.
+        let resError = {
+            ...config.messages.addFail,
+            _id: null
+        };
+
+        // Validation permissions.
+        let auth = ctrAuth.validateLogin({ token: args.token, option: collectionName, action: config.actions.add });
+        if (!auth.status) {
+            return {
+                ...resError,
+                message: auth.message
+            };
+        }
+
+        let exist = await Helper.validateIfExist({
+            dbName: config.db.programacion,
+            collectionName,
+            params: { id_fiscal: args.input.id_fiscal }
+        });
         if (exist) {
             return {
                 status: false,
@@ -60,10 +88,6 @@ class CtrDistributor {
                 _id: null
             };
         }
-        let resError = {
-            ...config.messages.addFail,
-            _id: null
-        };
         try {
             let newObj = {
                 ...args.input,
@@ -98,8 +122,17 @@ class CtrDistributor {
         }
     }
 
-    static async update(root, input) {
+    static async update(global, args) {
         try {
+            // Validation permissions.
+            let auth = ctrAuth.validateLogin({ token: args.token, option: collectionName, action: config.actions.update });
+            if (!auth.status) {
+                return {
+                    status: false,
+                    message: auth.message
+                };
+            }
+
             let objResult = await Db.update({
                 dbName: config.db.programacion,
                 collectionName,
@@ -126,8 +159,16 @@ class CtrDistributor {
         }
     }
 
-    static async delete(root, input) {
+    static async delete(global, args) {
         try {
+            // Validation permissions.
+            let auth = ctrAuth.validateLogin({ token: args.token, option: collectionName, action: config.actions.delete });
+            if (!auth.status) {
+                return {
+                    status: false,
+                    message: auth.message
+                };
+            }
             let objResult = await Db.delete({
                 dbName: config.db.programacion,
                 collectionName,

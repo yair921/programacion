@@ -10,17 +10,16 @@ type UpdateDeleteResponse {
 }
 
 type Distributor {
-    _id: ID!
-    id_fiscal: String!
-    nombre: String!
-    active: Boolean!
+    _id: ID
+    id_fiscal: String
+    nombre: String
+    active: Boolean
 }
 
 type DistributorResGetAll {
     status: Boolean
     message: String
-    data: [Distributor
-    ]
+    data: [Distributor]
 }
 
 input DistributorInput {
@@ -35,16 +34,15 @@ input DistributorInputUpdate {
 }
 
 type RoomType {
-    _id: ID!
-    nombre: String!
-    active: Boolean!
+    _id: ID
+    nombre: String
+    active: Boolean
 }
 
 type RoomTypeResGetAll {
     status: Boolean
     message: String
-    data: [RoomType
-    ]
+    data: [RoomType]
 }
 
 input RoomTypeInput {
@@ -57,16 +55,15 @@ input RoomTypeInputUpdate {
 }
 
 type Theater {
-    _id: ID!
-    nombre: String!
-    active: Boolean!
+    _id: ID
+    nombre: String
+    active: Boolean
 }
 
 type TheaterResGetAll {
     status: Boolean
     message: String
-    data: [Theater
-    ]
+    data: [Theater]
 }
 
 input TheaterInput {
@@ -79,16 +76,15 @@ input TheaterInputUpdate {
 }
 
 type MovieFormat {
-    _id: ID!
-    nombre: String!
-    active: Boolean!
+    _id: ID
+    nombre: String
+    active: Boolean
 }
 
 type MovieFormatResGetAll {
     status: Boolean
     message: String
-    data: [MovieFormat
-    ]
+    data: [MovieFormat]
 }
 
 input MovieFormatInput {
@@ -101,19 +97,18 @@ input MovieFormatInputUpdate {
 }
 
 type Room {
-    _id: ID!
-    idTheater: ID!
-    nombre: String!
-    numberChairs: Int!
-    cleaningTime: Int!
-    active: Boolean!
+    _id: ID
+    idTheater: ID
+    nombre: String
+    numberChairs: Int
+    cleaningTime: Int
+    active: Boolean
 }
 
 type RoomResGetAll {
     status: Boolean
     message: String
-    data: [Room
-    ]
+    data: [Room]
 }
 
 input RoomInput {
@@ -132,106 +127,92 @@ input RoomInputUpdate {
 }
 
 type Movie {
-    _id: ID!
-    idDistributor: ID!
-    idsMovieFormat: [ID!
-    ]!
-    nombre: String!
-    duration: Int!
-    active: Boolean!
+    _id: ID
+    idDistributor: ID
+    idsMovieFormat: [ID!]
+    nombre: String
+    duration: Int
+    active: Boolean
 }
 
 type MovieResGetAll {
     status: Boolean
     message: String
-    data: [Movie
-    ]
+    data: [Movie]
 }
 
 input MovieInput {
     idDistributor: ID!
-    idsMovieFormat: [ID!
-    ]!
+    idsMovieFormat: [ID!]!
     nombre: String!
     duration: Int!
 }
 
 input MovieInputUpdate {
     idDistributor: ID
-    idsMovieFormat: [ID!
-    ]
+    idsMovieFormat: [ID!]
     nombre: String
     duration: Int
     active: Boolean
 }
 
 type UserOption {
-    _id: ID!
-    nombre: String!
-    actions: [String!
-    ]!
-    active: Boolean!
+    _id: ID
+    nombre: String
+    actions: [String!]
+    active: Boolean
 }
 
 type UserOptionResGetAll {
     status: Boolean
     message: String
-    data: [UserOption
-    ]
+    data: [UserOption]
 }
 
 input UserOptionInput {
     nombre: String!
-    actions: [String!
-    ]!
+    actions: [String!]!
 }
 
 input UserOptionInputUpdate {
     nombre: String
-    actions: [String!
-    ]
+    actions: [String!]
     active: Boolean
 }
 
 type UserRol {
-    _id: ID!
-    nombre: String!
-    permissions: [UserRolPermission!
-    ]!
-    active: Boolean!
+    _id: ID
+    nombre: String
+    permissions: [UserRolPermission!]
+    active: Boolean
 }
 
 type UserRolPermission {
     idUserOption: ID!
     nameUserOption: String!
-    actions: [String!
-    ]!
+    actions: [String!]!
 }
 
 input UserRolPermissionInput {
     idUserOption: ID!
     nameUserOption: String!
-    actions: [String!
-    ]!
+    actions: [String!]!
 }
 
 type UserRolResGetAll {
     status: Boolean
     message: String
-    data: [UserRol
-    ]
+    data: [UserRol]
 }
 
 input UserRolInput {
     nombre: String!
-    permissions: [UserRolPermissionInput!
-    ]!
+    permissions: [UserRolPermissionInput!]!
 }
 
 input UserRolInputUpdate {
     nombre: String
-    permissions: [UserRolPermissionInput!
-    ]
+    permissions: [UserRolPermissionInput!]
     active: Boolean
 }
 
@@ -284,21 +265,21 @@ input LoginInputGet {
 
 type Query {
     "Get all distributors"
-    getAllDistributor: DistributorResGetAll
+    getAllDistributor(token: String!): DistributorResGetAll
     "Get all room types"
-    getAllRoomType: RoomTypeResGetAll 
+    getAllRoomType(token: String!): RoomTypeResGetAll 
     "Get all theaters"
-    getAllTheater: TheaterResGetAll
+    getAllTheater(token: String!): TheaterResGetAll
     "Get all movie formats"
-    getAllMovieFormat: MovieFormatResGetAll
+    getAllMovieFormat(token: String!): MovieFormatResGetAll
     "Get all rooms"
-    getAllRoom: RoomResGetAll
+    getAllRoom(token: String!): RoomResGetAll
     "Get al movies"
-    getAllMovie: MovieResGetAll
+    getAllMovie(token: String!): MovieResGetAll
     "Get all user options"
-    getAllUserOption: UserOptionResGetAll
+    getAllUserOption(token: String!): UserOptionResGetAll
     "Get all user roles"
-    getAllUserRol: UserRolResGetAll
+    getAllUserRol(token: String!): UserRolResGetAll
     "Get all user"
     getAllUser(token: String!): UserResGetAll
     "Get login"
@@ -358,7 +339,7 @@ type Mutation {
     "Add a user rol"
     addUserRol(token: String!, input: UserRolInput!): AddResponse
     "Update a user rol"
-    updateUserRol(_id: ID!, input: UserRolInputUpdate!): UpdateDeleteResponse
+    updateUserRol(token: String!, _id: ID!, input: UserRolInputUpdate!): UpdateDeleteResponse
     "Delete a user Rol"
     deleteUserRol(token: String!, _id: ID!): UpdateDeleteResponse
 

@@ -1,4 +1,5 @@
 const { errorHandler } = require('../utility/errorHandler');
+const ctrAuth = require('./ctrAuth');
 const Db = require('../utility/db');
 const config = require('../config');
 const Helper = require('../utility/helper');
@@ -6,18 +7,23 @@ const className = 'CtrTheater';
 const collectionName = 'theater';
 
 class CtrTheater {
+    static async getAll(global, { token }) {
 
-    static async getAll() {
+        // Build object error.
         let resError = {
             ...config.messages.getFail,
-            data: [
-                {
-                    _id: null,
-                    nombre: null,
-                    active: null
-                }
-            ]
+            data: null
         };
+
+        // Validation permissions.
+        let auth = ctrAuth.validateLogin({ token, option: collectionName, action: config.actions.get });
+        if (!auth.status) {
+            return {
+                ...resError,
+                message: auth.message
+            };
+        }
+
         try {
             let objResult = await Db.find({
                 dbName: config.db.programacion,
@@ -45,24 +51,35 @@ class CtrTheater {
         }
     }
 
-    static async add(root, args) {
-        let exist = await Helper.validateIfExist(
-            {
-                dbName: config.db.programacion,
-                collectionName,
-                params: { nombre: args.input.nombre }
-            });
-        if (exist) {
-            return {
-                status: false,
-                message: `El teatro ya existe en la base de datos`,
-                _id: null
-            };
-        }
+    static async add(global, args) {
+
+        // Build object error.
         let resError = {
             ...config.messages.addFail,
             _id: null
         };
+
+        // Validation permissions.
+        let auth = ctrAuth.validateLogin({ token: args.token, option: collectionName, action: config.actions.add });
+        if (!auth.status) {
+            return {
+                ...resError,
+                message: auth.message
+            };
+        }
+
+        let exist = await Helper.validateIfExist({
+            dbName: config.db.programacion,
+            collectionName,
+            params: { nombre: args.input.nombre }
+        });
+        if (exist) {
+            return {
+                status: false,
+                message: `The thater already exist in database.`,
+                _id: null
+            };
+        }
         try {
             let newObj = {
                 ...args.input,
@@ -97,13 +114,21 @@ class CtrTheater {
         }
     }
 
-    static async update(root, input) {
+    static async update(global, args) {
         try {
+            // Validation permissions.
+            let auth = ctrAuth.validateLogin({ token: args.token, option: collectionName, action: config.actions.update });
+            if (!auth.status) {
+                return {
+                    status: false,
+                    message: auth.message
+                };
+            }
             let objResult = await Db.update({
                 dbName: config.db.programacion,
                 collectionName,
-                _id: input._id,
-                set: { ...input.input, updated_at: new Date() }
+                _id: args._id,
+                set: { ...args.input, updated_at: new Date() }
             });
             if (!objResult.status) {
                 errorHandler({
@@ -125,12 +150,20 @@ class CtrTheater {
         }
     }
 
-    static async delete(root, input) {
+    static async delete(global, args) {
         try {
+            // Validation permissions.
+            let auth = ctrAuth.validateLogin({ token: args.token, option: collectionName, action: config.actions.delete });
+            if (!auth.status) {
+                return {
+                    status: false,
+                    message: auth.message
+                };
+            }
             let objResult = await Db.delete({
                 dbName: config.db.programacion,
                 collectionName,
-                _id: input._id
+                _id: args._id
             });
             if (!objResult.status) {
                 errorHandler({
